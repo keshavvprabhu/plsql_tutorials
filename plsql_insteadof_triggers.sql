@@ -29,13 +29,25 @@ create view vw_FinalView as
 select full_name, subject_name from trainer, subject;
 
 insert into vw_FinalView values ('Sachin Tendulkar', 'English');
-
+commit;
 CREATE OR REPLACE TRIGGER tr_io_insert 
 INSTEAD OF INSERT ON vw_FinalView
 FOR EACH ROW 
 BEGIN 
     INSERT into TRAINER (full_name) VALUES (:new.full_name);
     insert into subject (subject_name) values (:old.subject_name);
+    commit;
+END;
+/
+
+CREATE OR REPLACTR TRIGGER tr_io_update 
+INSTEAD OF UPDATE ON vw_FinalView
+FOR EACH ROW 
+BEGIN
+    UPDATE vw_FinalView SET full_name = :new.full_name
+    where full_name = :old.full_name;
+    update vw_FinalView set subject_name= :new.subject_name
+    where subject_name = :OLD.subject_name;
     commit;
 END;
 /
