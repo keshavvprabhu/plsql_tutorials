@@ -51,3 +51,15 @@ BEGIN
     commit;
 END;
 /
+
+-- https://www.youtube.com/watch?v=5GQbACGHY_E&list=PLL_LQvNX4xKyiExzq9GKwORoH6nvaRnOQ&index=24
+-- Instead Of Delete Trigger
+
+CREATE OR REPLACE TRIGGER tr_io_delete
+INSTEAD OF DELETE ON vw_FinalView
+FOR EACH ROW 
+BEGIN
+    DELETE FROM trainer WHERE full_name = :OLD.full_name;
+    DELETE FROM TRAINER WHERE subject_name = :OLD.subject_name;
+END;
+/
